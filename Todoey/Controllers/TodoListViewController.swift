@@ -11,28 +11,15 @@ import UIKit
 class TodoListViewController: UITableViewController { // Our class is a subclass of UITableViewController
 
     var itemArray = [Item]()
-    let defaults = UserDefaults.standard
-    
+    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let newItem = Item()
-        newItem.title = "Find Mike"
-        itemArray.append(newItem)
-        
-        let newItem2 = Item()
-        newItem2.title = "Buy Eggos"
-        itemArray.append(newItem2)
-        
-        let newItem3 = Item()
-        newItem3.title = "Destroy Things"
-        itemArray.append(newItem3)
-     
-        
-        if let items = defaults.array(forKey: "TodoListArray") as? [Item] {
-            itemArray = items
-        }
+        print(dataFilePath)
+    
+        loadItems()
     }
 
     //MARK - Tableview Datasource Methods // This code makes stuff show up in the table view!
@@ -60,8 +47,9 @@ class TodoListViewController: UITableViewController { // Our class is a subclass
         // print(itemArray[indexPath.row])
         
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
-     
-        tableView.reloadData()
+        // Right here we change the check mark depending on it's last state, put it into our array, and then encode these changes to our filepath everytime we click
+        saveItems()
+        
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -79,8 +67,9 @@ class TodoListViewController: UITableViewController { // Our class is a subclass
             let newItem = Item()
             newItem.title = textField.text!
             self.itemArray.append(newItem)
-            self.defaults.set(self.itemArray, forKey: "TodoListArray")
-            self.tableView.reloadData()
+            // RIght here we took what the person input, we updated our array and then the save items encoded the array to our data file path!
+            self.saveItems()
+            
             
         }
         
@@ -93,6 +82,33 @@ class TodoListViewController: UITableViewController { // Our class is a subclass
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
         
+    }
+    
+    //MARK: Model Manipulation Methods
+    
+    func saveItems() {
+        
+        let encoder = PropertyListEncoder()
+        
+        do {
+            let data = try encoder.encode(itemArray)
+            try data.write(to: dataFilePath!)
+        } catch {
+            print("Error encoding item array! \(error)")
+        }
+        self.tableView.reloadData()
+    }
+    
+    func loadItems() {
+        
+        if let data = try? Data(contentsOf: dataFilePath!) {
+            let decoder = PropertyListDecoder()
+            do {
+            itemArray = try decoder.decode([Item].self, from: data)
+            } catch {
+                print("Errors decoding! \(error)")
+            }
+        }
     }
     
     
