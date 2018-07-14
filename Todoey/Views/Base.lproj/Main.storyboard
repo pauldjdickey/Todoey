@@ -6,10 +6,11 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Items-->
+        <!--Notes-->
         <scene sceneID="Lsl-Hl-L7Y">
             <objects>
                 <tableViewController id="BXZ-PX-4eo" customClass="TodoListViewController" customModule="Todoey" customModuleProvider="target" sceneMemberID="viewController">
@@ -30,7 +31,7 @@
                             </connections>
                         </searchBar>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="toDoItemCell" id="w7x-HE-mat">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="w7x-HE-mat" customClass="SwipeTableViewCell" customModule="SwipeCellKit">
                                 <rect key="frame" x="0.0" y="84" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="w7x-HE-mat" id="ha2-GJ-ZBP">
@@ -45,29 +46,64 @@
                             <outlet property="delegate" destination="BXZ-PX-4eo" id="JcC-Pr-0vD"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Items" id="U6F-Dz-CVW">
+                    <navigationItem key="navigationItem" title="Notes" largeTitleDisplayMode="always" id="U6F-Dz-CVW">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="M7U-hz-sBf">
-                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="addButtonPressed:" destination="BXZ-PX-4eo" id="CUV-fZ-mVX"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="searchBar" destination="vJ0-5h-dER" id="Fs8-QI-1SJ"/>
+                        <segue destination="Gg4-5C-xn9" kind="show" identifier="goToNote" id="QjN-Er-hBO"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fne-Ed-sHC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2249" y="95"/>
+        </scene>
+        <!--Notes View Controller-->
+        <scene sceneID="sGP-MX-svN">
+            <objects>
+                <viewController id="Gg4-5C-xn9" customClass="NotesViewController" customModule="Todoey" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="WrA-MG-1za">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Enter your note here" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="yB0-0l-pCV">
+                                <rect key="frame" x="0.0" y="116" width="375" height="551"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="yB0-0l-pCV" firstAttribute="trailing" secondItem="Ks5-ZA-FaI" secondAttribute="trailing" id="9j3-B2-QKD"/>
+                            <constraint firstItem="yB0-0l-pCV" firstAttribute="bottom" secondItem="Ks5-ZA-FaI" secondAttribute="bottom" id="Bp9-LF-mma"/>
+                            <constraint firstItem="yB0-0l-pCV" firstAttribute="leading" secondItem="Ks5-ZA-FaI" secondAttribute="leading" id="LM6-wA-bDv"/>
+                            <constraint firstItem="yB0-0l-pCV" firstAttribute="top" secondItem="Ks5-ZA-FaI" secondAttribute="top" id="Xa7-sv-fkd"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Ks5-ZA-FaI"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0U5-c7-JbI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3168.8000000000002" y="94.902548725637189"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Ljj-Ed-zTo">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="nQm-4W-Jc2" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Hak-vC-GBS">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="Hak-vC-GBS">
+                        <rect key="frame" x="0.0" y="20" width="375" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.15686274510000001" green="0.66666666669999997" blue="0.75294117650000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
+                        <textAttributes key="largeTitleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
                     </navigationBar>
@@ -80,7 +116,7 @@
             </objects>
             <point key="canvasLocation" x="304.80000000000001" y="94.902548725637189"/>
         </scene>
-        <!--Todoey-->
+        <!--Folders-->
         <scene sceneID="pTU-a3-cNx">
             <objects>
                 <tableViewController id="A36-Ib-NSC" customClass="CategoryViewController" customModule="Todoey" customModuleProvider="target" sceneMemberID="viewController">
@@ -89,7 +125,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="categoryCell" id="O54-Ex-QrH">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="O54-Ex-QrH" customClass="SwipeTableViewCell" customModule="SwipeCellKit">
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="O54-Ex-QrH" id="neM-Qr-xjW">
@@ -103,7 +139,7 @@
                             <outlet property="delegate" destination="A36-Ib-NSC" id="wK6-ve-XMa"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Todoey" id="gJ0-ws-Wif">
+                    <navigationItem key="navigationItem" title="Folders" largeTitleDisplayMode="always" id="gJ0-ws-Wif">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="ff1-RJ-yHT">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
@@ -117,7 +153,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bgV-Be-wFR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1303" y="95"/>
+            <point key="canvasLocation" x="1270" y="95"/>
         </scene>
     </scenes>
     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

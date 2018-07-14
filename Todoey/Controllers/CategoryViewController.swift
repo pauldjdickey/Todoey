@@ -8,8 +8,9 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
-class CategoryViewController: UITableViewController {
+class CategoryViewController: SwipeTableViewController {
     
     
     let realm = try! Realm()
@@ -20,6 +21,8 @@ class CategoryViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         loadCategories()
+        tableView.separatorStyle = .none
+        print("View reloaded")
     }
 
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
@@ -31,7 +34,7 @@ class CategoryViewController: UITableViewController {
         let action = UIAlertAction(title: "Add", style: .default) { (action) in
             let newCategory = Category()
             newCategory.name = textField.text!
-            
+            newCategory.color = UIColor.randomFlat.hexValue()
             self.save(category: newCategory)
         }
         
@@ -49,10 +52,23 @@ class CategoryViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categories?.count ?? 1
     }
+    
+
+    
     // What to display in those cells
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "categoryCell", for: indexPath)
-        cell.textLabel?.text = categories?[indexPath.row].name
+        // Because we call super, it goes into our super class and triggers cellforrowat index path code
+        let cell = super.tableView(tableView, cellForRowAt: indexPath) // This sets up a cell, as the super controller has the dequeue method
+        // These modify the cells
+        cell.textLabel?.font = UIFont(name: (cell.textLabel?.font.fontName)!, size:20)
+        
+        if let category = categories?[indexPath.row] {
+            cell.textLabel?.text = category.name
+            cell.backgroundColor = UIColor(hexString: category.color ?? "28AAC0") // If there is no color value, here is the default value
+            cell.textLabel?.textColor = ContrastColorOf(cell.backgroundColor!, returnFlat: true)
+        }
+        
+        
         return cell
     }
     
@@ -92,5 +108,18 @@ class CategoryViewController: UITableViewController {
 
         tableView.reloadData()
     }
+    // Delete Categories from Swipe
+    override func updateModel(at indexPath: IndexPath) {
+        if let categoryForDeletion = self.categories?[indexPath.row] {
+            do {
+                try self.realm.write {
+                    self.realm.delete(categoryForDeletion)
+                }
+            } catch {
+                print("Error trying to delete category. \(error)")
+            }
+        }
+    }
     
 }
+
