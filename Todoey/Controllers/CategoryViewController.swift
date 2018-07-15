@@ -21,7 +21,6 @@ class CategoryViewController: SwipeTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         loadCategories()
-        tableView.separatorStyle = .none
         print("View reloaded")
     }
 
@@ -34,7 +33,7 @@ class CategoryViewController: SwipeTableViewController {
         let action = UIAlertAction(title: "Add", style: .default) { (action) in
             let newCategory = Category()
             newCategory.name = textField.text!
-            newCategory.color = UIColor.randomFlat.hexValue()
+            // newCategory.color = UIColor.randomFlat.hexValue()
             self.save(category: newCategory)
         }
         
@@ -64,8 +63,8 @@ class CategoryViewController: SwipeTableViewController {
         
         if let category = categories?[indexPath.row] {
             cell.textLabel?.text = category.name
-            cell.backgroundColor = UIColor(hexString: category.color ?? "28AAC0") // If there is no color value, here is the default value
-            cell.textLabel?.textColor = ContrastColorOf(cell.backgroundColor!, returnFlat: true)
+            // cell.backgroundColor = UIColor(hexString: category.color ?? "28AAC0") // If there is no color value, here is the default value
+            // cell.textLabel?.textColor = ContrastColorOf(cell.backgroundColor!, returnFlat: true)
         }
         
         
